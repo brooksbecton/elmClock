@@ -9,8 +9,6 @@ import Time exposing (..)
 
 
 
--- Add Time Zone
--- Ticking Duration
 
 
 type alias Model =
@@ -21,11 +19,16 @@ type alias Model =
     }
 
 
+epoch : Time.Posix
+epoch =
+    Time.millisToPosix 0
+
+
 initialModel : Model
 initialModel =
-    { currentTime = Time.millisToPosix 0
-    , startTime = Time.millisToPosix 0
-    , stopTime = Time.millisToPosix 0
+    { currentTime = epoch
+    , startTime = epoch
+    , stopTime = epoch
     , zone = Time.utc
     }
 
@@ -60,9 +63,29 @@ view model =
         , button [ onClick ClockOutClick ] [ text "Clock Out" ]
         , button [ onClick Clear ] [ text "Clear" ]
         , hr [] []
-        , p [] [ text ("Start: " ++ viewLocalTime model.startTime) ]
-        , p [] [ text ("Stop: " ++ viewLocalTime model.stopTime) ]
-        , viewTimeWorked model.zone model.startTime model.stopTime
+        , p []
+            [ text
+                ("Start: "
+                    ++ (if model.startTime /= epoch then
+                            viewLocalTime model.startTime
+
+                        else
+                            ""
+                       )
+                )
+            ]
+        , p []
+            [ text
+                ("Stop: "
+                    ++ (if model.stopTime /= epoch then
+                            viewLocalTime model.stopTime
+
+                        else
+                            ""
+                       )
+                )
+            ]
+        , viewAccruedTime model.startTime model.stopTime model.currentTime
         ]
 
 
@@ -87,26 +110,40 @@ viewHumanTime zone time =
         ( hour, minute, second ) =
             humanTime zone time
     in
-    String.fromInt hour ++ ":" ++ String.fromInt minute ++ ":" ++ String.fromInt second
+    String.fromInt (remainderBy 12 hour) ++ ":" ++ String.fromInt minute ++ ":" ++ String.fromInt second
 
 
-localHumanTime : Time.Posix -> String
-localHumanTime time =
-    viewHumanTime utc time
-
-
-viewTimeWorked : Time.Zone -> Time.Posix -> Time.Posix -> Html Msg
-viewTimeWorked zone startTime stopTime =
+viewAccruedTime : Time.Posix -> Time.Posix -> Time.Posix -> Html Msg
+viewAccruedTime startTime stopTime currentTime =
     let
-        ( hour, minute, second ) =
-            humanTime utc (Time.millisToPosix (Time.posixToMillis stopTime - Time.posixToMillis startTime))
+        timeWorked =
+            if stopTime == epoch then
+                Time.millisToPosix (Time.posixToMillis currentTime - Time.posixToMillis startTime)
+
+            else
+                Time.millisToPosix (Time.posixToMillis stopTime - Time.posixToMillis startTime)
+
+        hoursWorked =
+            Time.toHour utc timeWorked
+
+        minutesWorked =
+            Time.toMinute utc timeWorked
+
+        secondsWorked =
+            Time.toSecond utc timeWorked
     in
-    h2 []
-        [ text "Total Time Worked"
-        , h3 [] [ text ("Hours " ++ String.fromInt hour) ]
-        , h3 [] [ text ("Minutes " ++ String.fromInt minute) ]
-        , h3 [] [ text ("Seconds " ++ String.fromInt second) ]
-        ]
+    if startTime == epoch then
+        h2 [] [ text "Not Clocked In" ]
+
+    else if startTime /= epoch && currentTime /= epoch then
+        div []
+            [ p [] [ text ("Hours Worked: " ++ String.fromInt hoursWorked) ]
+            , p [] [ text ("Minutes Worked: " ++ String.fromInt minutesWorked) ]
+            , p [] [ text ("Seconds Worked: " ++ String.fromInt secondsWorked) ]
+            ]
+
+    else
+        br [] []
 
 
 subscriptions : Model -> Sub Msg
@@ -131,7 +168,7 @@ update msg model =
             ( { model | zone = newZone }, Cmd.none )
 
         Clear ->
-            ( { model | startTime = Time.millisToPosix 0, stopTime = Time.millisToPosix 0 }, Cmd.none )
+            ( { model | startTime = epoch, stopTime = epoch }, Cmd.none )
 
         ClockInClick ->
             ( model, Task.perform ClockIn Time.now )
