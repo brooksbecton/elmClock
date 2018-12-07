@@ -8,9 +8,6 @@ import Task exposing (Task)
 import Time exposing (..)
 
 
-
-
-
 type alias Model =
     { currentTime : Time.Posix
     , startTime : Time.Posix
