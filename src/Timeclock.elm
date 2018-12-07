@@ -49,30 +49,34 @@ main =
 
 view : Model -> Html Msg
 view model =
+    let
+        viewLocalTime =
+            viewHumanTime model.zone
+    in
     div []
         [ h1 [] [ text "Time Clock" ]
-        , p [] [ text ("Current Time: " ++ viewHumanTime model.zone model.currentTime) ]
+        , p [] [ text ("Current Time: " ++ viewLocalTime model.currentTime) ]
         , button [ onClick ClockInClick ] [ text "Clock In" ]
         , button [ onClick ClockOutClick ] [ text "Clock Out" ]
         , button [ onClick Clear ] [ text "Clear" ]
         , hr [] []
-        , p [] [ text ("Start: " ++ viewHumanTime model.zone model.startTime) ]
-        , p [] [ text ("Stop: " ++ viewHumanTime model.zone model.stopTime) ]
+        , p [] [ text ("Start: " ++ viewLocalTime model.startTime) ]
+        , p [] [ text ("Stop: " ++ viewLocalTime model.stopTime) ]
         , viewTimeWorked model.zone model.startTime model.stopTime
         ]
 
 
-humanTime : Time.Zone -> Posix -> ( String, String, String )
+humanTime : Time.Zone -> Posix -> ( Int, Int, Int )
 humanTime zone time =
     let
         hour =
-            String.fromInt (Time.toHour zone time)
+            Time.toHour zone time
 
         minute =
-            String.fromInt (Time.toMinute zone time)
+            Time.toMinute zone time
 
         second =
-            String.fromInt (Time.toSecond zone time)
+            Time.toSecond zone time
     in
     ( hour, minute, second )
 
@@ -83,7 +87,7 @@ viewHumanTime zone time =
         ( hour, minute, second ) =
             humanTime zone time
     in
-    hour ++ ":" ++ minute ++ ":" ++ second
+    String.fromInt hour ++ ":" ++ String.fromInt minute ++ ":" ++ String.fromInt second
 
 
 localHumanTime : Time.Posix -> String
@@ -99,9 +103,9 @@ viewTimeWorked zone startTime stopTime =
     in
     h2 []
         [ text "Total Time Worked"
-        , h3 [] [ text ("Hours " ++ hour) ]
-        , h3 [] [ text ("Minutes " ++ minute) ]
-        , h3 [] [ text ("Seconds " ++ second) ]
+        , h3 [] [ text ("Hours " ++ String.fromInt hour) ]
+        , h3 [] [ text ("Minutes " ++ String.fromInt minute) ]
+        , h3 [] [ text ("Seconds " ++ String.fromInt second) ]
         ]
 
 
