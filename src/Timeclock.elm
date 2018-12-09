@@ -68,28 +68,30 @@ view model =
                         ]
                     , div [ class "PunchControl" ]
                         [ div [ class "sticky" ]
-                            [ p
-                                []
-                                [ text
-                                    ("Start: "
-                                        ++ (if model.startTime /= epoch then
-                                                viewLocalTime model.startTime
+                            [ p []
+                                [ span [] [ text "Start: " ]
+                                , span
+                                    [ classList [ ( "bounceIn", model.startTime /= epoch ) ] ]
+                                    [ text
+                                        (if model.startTime /= epoch then
+                                            viewLocalTime model.startTime
 
-                                            else
-                                                ""
-                                           )
-                                    )
+                                         else
+                                            ""
+                                        )
+                                    ]
                                 ]
                             , p []
-                                [ text
-                                    ("Stop: "
-                                        ++ (if model.stopTime /= epoch then
-                                                viewLocalTime model.stopTime
+                                [ span [] [ text "Stop: " ]
+                                , span [ classList [ ( "bounceIn", model.stopTime /= epoch ) ] ]
+                                    [ text
+                                        (if model.stopTime /= epoch then
+                                            viewLocalTime model.stopTime
 
-                                            else
-                                                ""
-                                           )
-                                    )
+                                         else
+                                            ""
+                                        )
+                                    ]
                                 ]
                             , viewAccruedTime model.startTime model.stopTime model.currentTime
                             ]
