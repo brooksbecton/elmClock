@@ -54,35 +54,51 @@ view model =
             viewHumanTime model.zone
     in
     div []
-        [ h1 [] [ text "Time Clock" ]
-        , p [] [ text ("Current Time: " ++ viewLocalTime model.currentTime) ]
-        , button [ onClick ClockInClick ] [ text "Clock In" ]
-        , button [ onClick ClockOutClick ] [ text "Clock Out" ]
-        , button [ onClick Clear ] [ text "Clear" ]
-        , hr [] []
-        , p []
-            [ text
-                ("Start: "
-                    ++ (if model.startTime /= epoch then
-                            viewLocalTime model.startTime
+        [ div [ class "container" ]
+            [ div
+                [ class "row" ]
+                [ div [ class "col" ] []
+                , div [ class "col-10" ]
+                    [ h1 [] [ text "Time Clock" ]
+                    , p [] [ text ("Current Time: " ++ viewLocalTime model.currentTime) ]
+                    , div [ class "PunchControl" ]
+                        [ div [ class "sticky" ]
+                            [ p
+                                []
+                                [ text
+                                    ("Start: "
+                                        ++ (if model.startTime /= epoch then
+                                                viewLocalTime model.startTime
 
-                        else
-                            ""
-                       )
-                )
-            ]
-        , p []
-            [ text
-                ("Stop: "
-                    ++ (if model.stopTime /= epoch then
-                            viewLocalTime model.stopTime
+                                            else
+                                                ""
+                                           )
+                                    )
+                                ]
+                            , p []
+                                [ text
+                                    ("Stop: "
+                                        ++ (if model.stopTime /= epoch then
+                                                viewLocalTime model.stopTime
 
-                        else
-                            ""
-                       )
-                )
+                                            else
+                                                ""
+                                           )
+                                    )
+                                ]
+                            , viewAccruedTime model.startTime model.stopTime model.currentTime
+                            ]
+                        ]
+                    ]
+                , div [ class "col" ] []
+                ]
             ]
-        , viewAccruedTime model.startTime model.stopTime model.currentTime
+        , footer
+            [ class "Footer" ]
+            [ button [ class "btn", onClick ClockInClick, disabled (model.startTime /= epoch) ] [ text "Clock In" ]
+            , button [ class "btn", onClick ClockOutClick, disabled (model.stopTime /= epoch) ] [ text "Clock Out" ]
+            , button [ class "btn", onClick Clear ] [ text "Clear" ]
+            ]
         ]
 
 
@@ -129,10 +145,7 @@ viewAccruedTime startTime stopTime currentTime =
         secondsWorked =
             Time.toSecond utc timeWorked
     in
-    if startTime == epoch then
-        h2 [] [ text "Not Clocked In" ]
-
-    else if startTime /= epoch && currentTime /= epoch then
+    if startTime /= epoch && currentTime /= epoch then
         div []
             [ p [] [ text ("Hours Worked: " ++ String.fromInt hoursWorked) ]
             , p [] [ text ("Minutes Worked: " ++ String.fromInt minutesWorked) ]
@@ -140,7 +153,11 @@ viewAccruedTime startTime stopTime currentTime =
             ]
 
     else
-        br [] []
+        div []
+            [ p [] [ text "Hours Worked: 0" ]
+            , p [] [ text "Minutes Worked: 0" ]
+            , p [] [ text "Seconds Worked: 0" ]
+            ]
 
 
 subscriptions : Model -> Sub Msg

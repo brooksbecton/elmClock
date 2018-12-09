@@ -1,16 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.css"
+      integrity="sha256-gVCm5mRCmW9kVgsSjQ7/5TLtXqvfCoxhdsjE6O1QLm8="
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+      integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+      integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+      crossorigin="anonymous"
+    ></script>
+
+    <style>
+      .sticky {
+        position: block;
+        right: 0;
+        z-index: 150;
+        transform: rotate(5deg);
+        width: 200px;
+        min-height: 150px;
+        margin: auto;
+        padding: 10px;
+        font-family: "Comic Sans MS", "Comic Sans", "Chalkboard SE",
+          "Comic Neue", cursive;
+        font-size: 14px;
+        color: #000;
+        background: rgba(255, 255, 51, 0.8);
+        box-shadow: -2px 2px 2px rgba(0, 0, 0, 0.3);
+      }
+      .sticky:before,
+      .sticky:after {
+        content: "";
+        display: block;
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        top: 0;
+        right: 0;
+      }
+      .sticky:before {
+        border-top: solid 8px #fff;
+        border-right: solid 8px #fff;
+        border-left: solid 8px transparent;
+        border-bottom: solid 8px transparent;
+      }
+      .sticky:after {
+        border-bottom: solid 8px #dddd33;
+        border-left: solid 8px #dddd33;
+        border-right: solid 8px transparent;
+        border-top: solid 8px transparent;
+      }
+    </style>
+
+    <style>
+      .PunchControl {
+        margin: auto;
+      }
+
+
+      .Footer {
+        background: lightslategrey;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        position: absolute;
+        padding: 2%;
+        width: 100vw;
+      }
+
+      .Footer * {
+        margin-right: 5%;
+      }
+
+      .Footer *:last-child {
+        margin-right: 0%;
+      }
+    </style>
     <title>TimeClock</title>
-</head>
-<body>
+  </head>
+  <body>
     <div id="elm-node"></div>
+
     <script src="elm.js"></script>
     <script>
-        Elm.Timeclock.init({node: document.getElementById("elm-node")})
+      Elm.Timeclock.init({ node: document.getElementById("elm-node") });
     </script>
-</body>
+  </body>
 </html>
