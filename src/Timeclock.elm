@@ -59,8 +59,13 @@ view model =
                 [ class "row" ]
                 [ div [ class "col" ] []
                 , div [ class "col-10" ]
-                    [ h1 [] [ text "Time Clock" ]
-                    , p [] [ text ("Current Time: " ++ viewLocalTime model.currentTime) ]
+                    [ div [ class "Header" ]
+                        [ h1
+                            []
+                            [ text "Time Clock" ]
+                        , p []
+                            [ text ("Current Time: " ++ viewLocalTime model.currentTime) ]
+                        ]
                     , div [ class "PunchControl" ]
                         [ div [ class "sticky" ]
                             [ p
