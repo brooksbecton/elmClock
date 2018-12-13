@@ -5,11 +5,11 @@ A time tracking web page made in Elm Lang
 ## Get Started
 
 * Clone the Project
-* Have [Elm](https://elm-lang.org/) installed
-* Run `elm reactor`
-* Navigate to the `TimeClock.elm` page
+* Run `npm i`
+* Run `npm run watch`
 
 ## Building
+
 * `elm make src/TimeClock.elm --optimize --output=elm.js`
 * `npm install uglify-js -g`
 * `uglifyjs elm.js --compress 'pure_funcs="F2,F3,F4,F5,F6,F7,F8,F9,A2,A3,A4,A5,A6,A7,A8,A9",pure_getters,keep_fargs=false,unsafe_comps,unsafe' | uglifyjs --mangle --output=elm.js`
